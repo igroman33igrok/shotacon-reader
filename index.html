@@ -42,7 +42,7 @@
 
     // 🔥 CDN jsDelivr (ВМЕСТО raw.githubusercontent.com)
     const base =
-      `https://cdn.jsdelivr.net/gh/igroman33igrok/shotacon-reader@main/manga/${slug}/${chapter}`;
+      `https://raw.githubusercontent.com/igroman33igrok/shotacon-reader/main/manga/${slug}/${chapter}`;
 
     fetch(`${base}/manifest.json`)
       .then(response => {
