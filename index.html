@@ -2,26 +2,69 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Shotacon Manga</title>
+  <title>Shotacon Reader</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body {
       margin: 0;
-      background: #111;
-      color: white;
-      font-family: sans-serif;
+      padding: 0;
+      background: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
     }
+
     img {
       width: 100%;
       display: block;
+    }
+
+    .error {
+      padding: 20px;
+      text-align: center;
+      color: #ff5555;
     }
   </style>
 </head>
 <body>
 
-  <!-- ВСТАВЛЯЕШЬ ССЫЛКИ НА СТРАНИЦЫ -->
-  <img src="IMAGES/page1.jpg">
-  <img src="IMAGES/page2.jpg">
-  <img src="IMAGES/page3.jpg">
+<script>
+  // Пример URL:
+  // /manga/love-lesson/23
+  const parts = window.location.pathname.split("/").filter(Boolean);
+
+  if (parts.length < 3 || parts[0] !== "manga") {
+    document.body.innerHTML =
+      '<div class="error">Некорректная ссылка</div>';
+  } else {
+    const slug = parts[1];
+    const chapter = parts[2];
+
+    // 🔥 CDN jsDelivr (ВМЕСТО raw.githubusercontent.com)
+    const base =
+      `https://cdn.jsdelivr.net/gh/igroman33igrok/shotacon-reader@main/manga/${slug}/${chapter}`;
+
+    fetch(`${base}/manifest.json`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("manifest not found");
+        }
+        return response.json();
+      })
+      .then(data => {
+        for (let i = 1; i <= data.pages; i++) {
+          const img = document.createElement("img");
+          img.src = `${base}/${String(i).padStart(3, "0")}.jpg`;
+          img.loading = "lazy";
+          document.body.appendChild(img);
+        }
+      })
+      .catch(() => {
+        document.body.innerHTML =
+          '<div class="error">Глава не найдена или ещё не загружена</div>';
+      });
+  }
+</script>
 
 </body>
 </html>
