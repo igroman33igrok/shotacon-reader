@@ -26,6 +26,7 @@
 <body>
 
 <script>
+  // Получаем slug из URL: /manga/abibibi
   const parts = window.location.pathname.split("/").filter(Boolean);
 
   if (parts.length !== 2 || parts[0] !== "manga") {
@@ -36,11 +37,13 @@
 
   const slug = parts[1];
 
+  // manifest.json — ТОЛЬКО raw.githubusercontent.com
   const manifestUrl =
     `https://raw.githubusercontent.com/igroman33igrok/shotacon-reader/main/manga/${slug}/manifest.json`;
 
+  // картинки — ТОЛЬКО raw.githubusercontent.com
   const imagesBase =
-    `https://cdn.jsdelivr.net/gh/igroman33igrok/shotacon-reader@main/manga/${slug}`;
+    `https://raw.githubusercontent.com/igroman33igrok/shotacon-reader/main/manga/${slug}`;
 
   fetch(manifestUrl)
     .then(r => {
@@ -57,7 +60,7 @@
     })
     .catch(() => {
       document.body.innerHTML =
-        '<div class="error">Манга не найдена</div>';
+        '<div class="error">Манга не найдена или ещё не загружена</div>';
     });
 </script>
 
